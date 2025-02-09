@@ -13,7 +13,7 @@ class CustomUserCreationForm(UserCreationForm):
                 'class':'form-control',
                 'patter':'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
                 'placeholder':'Ingrese su contraseña',
-                'title' : ''
+                'title' : 'Formato no valido',  
                 }
         )
     )
@@ -24,7 +24,7 @@ class CustomUserCreationForm(UserCreationForm):
                 'class':'form-control',
                 'patter':'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
                 'placeholder':'Confirme su contraseña',
-                'title' : ''
+                'title' : 'Formato no valido'
                 
                 }
         )
@@ -53,7 +53,9 @@ class CustomUserCreationForm(UserCreationForm):
                 'required': True,
                 'minlength': '20',
                 'maxlength': '30',
-                'pattern': '^[a-zA-Z0-9]+@utez\.edu\.mx$',
+                'title' : 'Ingresa un correo con dominio de la Utez',
+
+               'pattern': '^[a-zA-Z0-9]+@utez\.edu\.mx$',
             }),
             
             'name': forms.TextInput(attrs={  
@@ -62,6 +64,8 @@ class CustomUserCreationForm(UserCreationForm):
                 'required': True,
                 'minlength': '2',
                 'maxlength': '50',
+                'title' : 'Solo letras',  
+
                 'pattern': '^[a-zA-Z]+$'
             }),
 
@@ -71,6 +75,8 @@ class CustomUserCreationForm(UserCreationForm):
                 'required': True,
                 'minlength': '2',
                 'maxlength': '50',
+                'title' : 'Solo letras',  
+
                 'pattern': '^[a-zA-Z]+$'
             }),
 
@@ -78,15 +84,18 @@ class CustomUserCreationForm(UserCreationForm):
                 'class': 'form-control',
                 'placeholder': 'Edad',
                 'required': True,
-                'min': '3',
-                'max': '3',
-                'pattern': '^\d{10}$', 
+                'minlength': '18',
+                'maxlength': '100',
+                'title' : 'Edad invalida',  
+
+               'pattern': '^\d{10}$', 
             }),
 
             'tel': forms.NumberInput(attrs={ 
                 'class': 'form-control',
                 'placeholder': 'Teléfono',
                 'required': True,
+                'title' : 'Debe contener 10 didjitos',  
                 'pattern': '^\d{10}$', 
             }),
             
@@ -96,7 +105,8 @@ class CustomUserCreationForm(UserCreationForm):
                 'required': True,
                 'min': '10',
                 'max': '10',
-                'pattern':'^\d{5}[a-zA-Z]{2}\d{3}$'
+                'title' : 'Formato no valido',  
+               'pattern':'^\d{5}[a-zA-Z]{2}\d{3}$'
             }),
         
         }
@@ -116,7 +126,9 @@ class CustomUserCreationForm(UserCreationForm):
             raise forms.ValidationError('Exediste el limite de caracteres')
 
         surname=self.cleaned_data.get('surname')
-        if not re.match(name_regex,surname):
+        surname_regex = r'^[a-zA-Z]+$' 
+
+        if not re.match(surname_regex,surname):
             raise forms.ValidationError('Formato invalido ingresa solo letras')
         if len(surname)>100 or len(surname)<3:
             raise forms.ValidationError('Exediste el limite de caracteres')
@@ -160,6 +172,7 @@ class CustomUserLoginForm(AuthenticationForm):
             'required': True,
             'minlength': '20',
             'maxlength': '30',
+            'title': 'El correo no pertenece al dominio de la UTEZ',
             'pattern': '^[a-zA-Z0-9]+@utez\.edu\.mx$',
         })
     )
@@ -171,6 +184,7 @@ class CustomUserLoginForm(AuthenticationForm):
             'pattern': '^(?=.*\d)(?=.*[A-Z])(?=.*[!#$%&?]).{8,}$',
             'required': True,
             'minlength': '8',
+             'title': 'Contraseña no valida',
             'maxlength': '50',
         })
     )
