@@ -64,54 +64,137 @@
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Registrarse</button>
             </div>
+
+            
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% include 'mensaje.html' %}
         </form>
 
     </div>
 
     <script>
 
-        function validateForm() {
-            let password1 = document.getElementById("id_password1").value;
-            let password2 = document.getElementById("id_password2").value;
+function validateForm() {
+    let email = document.getElementById("id_email").value;
+    let name = document.getElementById("id_name").value;
+    let surname = document.getElementById("id_surname").value;
+    let controlNumber = document.getElementById("id_control_number").value;
+    let age = document.getElementById("id_age").value;
+    let tel = document.getElementById("id_tel").value;
+    let password1 = document.getElementById("id_password1").value;
+    let password2 = document.getElementById("id_password2").value;
 
-            if (password1.length < 8) {
+    const emailRegex = /^[a-zA-Z0-9]+@utez\.edu\.mx$/;
+    if (!emailRegex.test(email)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Ingresa un correo del dominio de la UTZEM.",
+        });
+        return false;
+    }
 
-                Swal.fire({
-                    title: "Error",
-                    icon: "error",
-                    text: "La contraseña debe tener al menos 8 caracteres.",
+    const nameRegex = /^[a-zA-Z]+$/;
+    if (!nameRegex.test(name)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Formato inválido, ingresa solo letras en el nombre.",
+        });
+        return false;
+    }
+    if (name.length < 3 || name.length > 50) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "El nombre debe tener entre 3 y 50 caracteres.",
+        });
+        return false;
+    }
 
-                });
+    const surnameRegex = /^[a-zA-Z]+$/;
+    if (!surnameRegex.test(surname)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Formato inválido, ingresa solo letras en el apellido.",
+        });
+        return false;
+    }
+    if (surname.length < 3 || surname.length > 100) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "El apellido debe tener entre 3 y 100 caracteres.",
+        });
+        return false;
+    }
 
-                return false;
+    const controlNumberRegex = /^\d{5}[a-zA-Z]{2}\d{3}$/;
+    if (!controlNumberRegex.test(controlNumber)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Formato inválido del número de control.",
+        });
+        return false;
+    }
 
-            } else if (password1 != password2) {
+    const ageRegex = /^\d{2}$/;
+    if (!ageRegex.test(age)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Edad inválida.",
+        });
+        return false;
+    }
 
-                Swal.fire({
-                    title: "Error",
-                    icon: "error",
-                    text: "Las contraseñas no coinciden ",
-                    draggable: true
-                });
+    const telRegex = /^\d{10}$/;
+    if (!telRegex.test(tel)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "El teléfono debe tener 10 dígitos.",
+        });
+        return false;
+    }
 
-                return false;
+    const passwordRegex = /^(?=.*\d)(?=.*[A-Z])(?=.*[!#$%&?]).{8,}$/;
+    if (!passwordRegex.test(password1)) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "La contraseña debe tener al menos una letra mayúscula, un número y un carácter especial, y al menos 8 dígitos.",
+        });
+        return false;
+    }
 
-            } else {
-                Swal.fire({
+    if (password1 !== password2) {
+        Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Las contraseñas no coinciden.",
+            draggable: true,
+        });
+        return false;
+    }
 
+        Swal.fire({
+        title: "Realizado",
+        text: "Acción realizada con éxito.",
+        icon: "success",
+    });
 
-                    title: "Realizado",
-                    text: "Accion relaizada con exito",
-                    icon: "Succes"
-
-
-                });
-
-                return true
-            }
-
-        }
-
+    return true;
+}
     </script>
 </body>
 
